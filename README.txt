@@ -9,3 +9,9 @@ Installation:
     source ~/.itermbg/install
 
 You can add that last line to your .bashrc file, and the effect will take place automatically, everywhere.
+
+
+Addendum
+========
+
+To take this further, it might be interesting to implement a Python daemon which presents a named pipe as a FIFO queue. iTerm can be instructed to consume its background from the FIFO queue. See: http://stackoverflow.com/questions/3806210/python-interprocess-querying-control
