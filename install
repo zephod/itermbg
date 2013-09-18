@@ -1,0 +1,11 @@
+myfunction() {
+  if [ "$PWD" != "$MYOLDPWD" ]; then
+    MYOLDPWD="$PWD";
+    echo 'changing'
+    ~/.itermbg/go 
+  fi
+}
+
+export PROMPT_COMMAND=myfunction
+
+alias itermbg=~/.itermbg/go
