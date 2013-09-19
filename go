@@ -27,24 +27,32 @@ def my_dir():
     path = os.path.dirname(os.path.abspath(__file__))
     return path
 
-def gen_img(line1,line2=None):
+def gen_img(line1,line2=None,pattern=None):
     _filename = hash(line1+'::'+str(line2))
     filename = os.path.join(my_dir(),'cache',str(_filename))
-    if os.path.exists(filename):
-        return filename
-    print 'generating'
+
+    #if os.path.exists(filename):
+    #    return filename
 
     cols,lines = get_size()
-    w = cols * CHAR_WIDTH * 2
-    h = lines * CHAR_HEIGHT * 2
+    w = cols * CHAR_WIDTH + 25
+    h = lines * CHAR_HEIGHT + 8
 
     img = Image.new('RGBA',(w, h))
     draw = ImageDraw.Draw(img)
     size = 50 * 2
+    
+    # Blit the background pattern onto the image
+    if pattern:
+        pattern = Image.open(pattern)
+        pw,ph = pattern.size
+        for y in range(0,h+ph,ph):
+            for x in range(0,w+pw,pw):
+                img.paste( pattern, (x,y))
 
-    f = ImageFont.truetype(os.path.join(my_dir(),'Ubuntu-R.ttf'),95)
+    f = ImageFont.truetype(os.path.join(my_dir(),'/Library/Fonts/Microsoft/Matura Script Capitals'),65)
     txt_w, txt_h = draw.textsize(line1, f)
-    draw.text( (w-txt_w-40, 40), line1, fill=(255,100,100), font=f)
+    draw.text( (w-txt_w-10, 20), line1, fill=(100,100,100), font=f)
 
     img.save(filename, 'GIF', transparency=1)
     return filename
@@ -71,6 +79,11 @@ def get_size():
 if __name__=='__main__':
     home = os.path.expanduser('~')
     line1 = os.getcwd().replace(home,'~')
-    print 'overwriting bg'
-    filename = gen_img( line1 )
+    pattern = '/Users/zephod/.itermbg/carbon.png'
+    pattern = '/Users/zephod/.itermbg/honey.png'
+    pattern = '/Users/zephod/.itermbg/microcarbon.png'
+    #pattern = '/Users/zephod/.itermbg/bindingdark.png'
+    #pattern = '/Users/zephod/.itermbg/maze.png'
+    #pattern = '/Users/zephod/.itermbg/tweed.png'
+    filename = gen_img( line1,pattern=pattern )
     set_img(get_tty(),filename)
